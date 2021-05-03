@@ -1,6 +1,7 @@
 package org.insa.graphs.model;
 
-/**
+/**kouki sarra
+ * 
  * Class representing a point (position) on Earth.
  *
  */
@@ -64,6 +65,7 @@ public final class Point {
      * @return Distance between this point and the target point, in meters.
      */
     public double distanceTo(Point target) {
+    	
         return distance(this, target);
     }
 
