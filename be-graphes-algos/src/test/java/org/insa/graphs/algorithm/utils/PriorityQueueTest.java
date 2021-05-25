@@ -316,5 +316,4 @@ public abstract class PriorityQueueTest {
             assertEquals(min, queue.findMin().get());
         }
     }
-
 }
