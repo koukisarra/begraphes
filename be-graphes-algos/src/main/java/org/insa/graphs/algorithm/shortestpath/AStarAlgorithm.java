@@ -11,6 +11,7 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
     }
     
    protected Label[] InitialiseLabels() {
+	   /*Create an array of labels size nbnodes*/
 	   LabelStar ArrayLabels[] = new LabelStar[nbNodes] ;
 	   List<Node> nodes = graph.getNodes();
 	   
@@ -23,11 +24,11 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
 	   for (Node node : nodes) {
 		   ArrayLabels[node.getId()] = new LabelStar(node);
 		   
-		   // the cost is the distance between this point and the destination point, in meters
+		   // Case : length : the cost is the distance between this point and the destination point, in meters
 		   if(data.getMode() == AbstractInputData.Mode.LENGTH) {
 			   Cost = node.getPoint().distanceTo(DestinationP);
 			   
-			   //or it's the time (ie Distance divided by speed) 
+			   //Case : Time i
 	       	} else {
 	       		Cost = 3.6* node.getPoint().distanceTo(DestinationP) / MaxSpeed; 
 	       	}
@@ -36,7 +37,7 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
 	   }
 	   return ArrayLabels ; 
     }
-  // Pour éviter le problème des sommets marqués qui font des cercle dasn toute la carte
+  // To avoid the problem of marked vertices which make circles throughout the map
    private int Speed() {
 	   int MaxSpeedData =  data.getMaximumSpeed() ; 
 	   int MaxSpeedGraph = graph.getGraphInformation().getMaximumSpeed() ;

@@ -147,7 +147,7 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
 	    			if(this.array.get(i).equals(x))
 	    				index = i;
 	    		}
-	    	/* if x not found, index set to -1 */
+	    	/* if x not found, index= -1 */
 	    	}catch(EmptyPriorityQueueException e) {
 	    		index = -1;
 	    	}
@@ -157,7 +157,8 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
 	    	throw new ElementNotFoundException(x);
 	    
 	    E LastElement= this.array.get(--this.currentSize);
-	    	
+	    	/*regle pere fils*/
+	    
 	    this.arraySet(index, LastElement);
 	    this.percolateDown(index);
 		this.percolateUp(index);

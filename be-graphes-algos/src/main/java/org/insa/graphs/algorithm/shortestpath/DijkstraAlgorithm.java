@@ -22,7 +22,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	
   protected Label[] InitialiseLabels() {
   
-  /* array of labels initialized with the values oft the given nodes */
+  /* array of labels of size nbNodes */
 	    Label[] ArrayLabels = new Label[nbNodes];
 	
 	    List<Node> nodes = graph.getNodes();
@@ -42,10 +42,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
   	 int nb_explored = 0 ;
   	 int nb_marked = 0 ;
   	 
-      // Notify observers about the first event (origin processed).
+      // Notify users about the first event (origin processed).
       notifyOriginProcessed(data.getOrigin());
 
-      /* Initializing the heap */ 
+      /* Creating the heap */ 
       BinaryHeap<Label> Heap = new BinaryHeap<>();
       
       Node Origin = data.getOrigin();
@@ -80,26 +80,27 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
           List<Arc> ListSuccessors = CurrentLabel.getCurrentNode().getSuccessors() ;
           
-      	/* Running through successors of the current summit*/
+      	/* Running through successors */
       	for (Arc ArcIter: ListSuccessors ) {
       		// nbrArcs += 1 ;
    
-      		/* Small test to check if the road is allowed */ 
+      		/* test to check if the arc is allowed */ 
       		if (data.isAllowed(ArcIter)) {
       			
 	        		Label IterDestination = ArrayLabels[ArcIter.getDestination().getId()];
 	        		
 	        		/*Notify observers about the node being reached*/ 
 	        		notifyNodeReached(ArcIter.getDestination());
-	        		
+	        		/* case : the destination node is not marked*/ 
 	        		if(! IterDestination.isMarked()) {
-	        			
+	        			/*  case:  cost of  destination node is bigger than the cost of the current node+ the length between the two nodes*/
+ 
 		        			if (!IterDestination.isMarked() && IterDestination.getCost() > CurrentLabel.getCost() + data.getCost(ArcIter)) {
 		        				
 		        				try {
 		        					Heap.remove(IterDestination);
 		        				} catch(ElementNotFoundException e) {}
-		        				
+		        				/*  update:  cost*/
 		        				nb_explored ++ ;
 		        				IterDestination.setCost(CurrentLabel.getCost() + data.getCost(ArcIter));
 		        				IterDestination.setFather(ArcIter);
@@ -111,7 +112,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
       	}
       }
      
-      // Destination has no predecessor, the solution is infeasible...
+      //  if : Destination has no predecessor, the solution is infeasible...
 		if((DestinationLabel.getFather()==null && (data.getOrigin().compareTo(data.getDestination())!= 0)  ) || !DestinationLabel.isMarked()) {
 			System.out.println("Chemin impossible") ; 
 			solution = new ShortestPathSolution(data, Status.INFEASIBLE);
@@ -120,15 +121,15 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
       	// The destination has been found, notify the observers.
           notifyDestinationReached(data.getDestination());
           
-          // Empty Path
+          // if : the path is empthy
           if(data.getOrigin().compareTo(data.getDestination()) == 0) { 
-          	// Create the final solution.
+          	//  solution.
           	System.out.println("Chemin Vide") ; 
              solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph));
               
           }else {
  
-          // Create the path from the array of predecessors...
+          // create a list with all the arcs leading to the destination
       	ArrayList<Arc> arcs = new ArrayList<>();
       	
       	while(!CurrentLabel.equals(OriginLabel)) {
@@ -137,7 +138,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
       		CurrentLabel = ArrayLabels[CurrentLabel.getFather().getOrigin().getId()];
       		
       	}
-      	// Reverse the path...
+      	// retrace the path backwards so the we can have it from source to destination
           Collections.reverse(arcs);
         
           Path path = new Path(graph, arcs) ; 
